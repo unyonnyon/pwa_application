@@ -1,14 +1,58 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <header>
+      <template v-if="isAuthenticated">
+        <router-link
+          to="/"
+          class="header-item"
+        >
+          comments
+        </router-link>
+        <span
+          class="header-item"
+          @click="logout"
+        >logout</span>
+      </template>
+      <template v-if="!isAuthenticated">
+        <router-link
+          to="/login"
+          class="header-item"
+        >
+          login
+        </router-link>
+        <router-link
+          to="/register"
+          class="header-item"
+        >
+          register
+        </router-link>
+      </template>
+    </header>
+    <router-view />
   </div>
 </template>
 
-<style>
+<script>
+export default {
+  computed: {
+    isAuthenticated() {
+      return this.$store.getters.idToken !== null;
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
+  }
+}
+</script>>
+
+<style scoped>
+.header-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
